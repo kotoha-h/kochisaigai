@@ -14,6 +14,7 @@ const quakeIcon = L.icon({
   iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
   iconSize: [32, 32],
 });
+
 const tsunamiIcon = L.icon({
   iconUrl: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
   iconSize: [32, 32],
@@ -64,12 +65,10 @@ const municipalities = [
 
 // ===============================
 // 避難所生成
-// 各市町村：
-//   🔴 地震避難所 ×2
-//   🔵 津波避難所 ×1
 // ===============================
 municipalities.forEach((m) => {
-  // 地震
+
+  // 🔴 地震避難所（2か所）
   for (let i = 1; i <= 2; i++) {
     L.marker(
       [m.lat + i * 0.01, m.lng - i * 0.01],
@@ -78,11 +77,12 @@ municipalities.forEach((m) => {
       .addTo(map)
       .bindPopup(`
         <strong>${m.name}</strong><br>
-        🔴 地震避難所 ${i}
+        🔴 地震避難所 ${i}<br>
+        内陸の学校・体育館を想定
       `);
   }
 
-  // 津波
+  // 🔵 津波避難所（1か所）
   L.marker(
     [m.lat - 0.02, m.lng + 0.02],
     { icon: tsunamiIcon }
@@ -90,7 +90,8 @@ municipalities.forEach((m) => {
     .addTo(map)
     .bindPopup(`
       <strong>${m.name}</strong><br>
-      🔵 津波避難所
+      🔵 津波避難所<br>
+      高台・津波避難タワー想定
     `);
 });
 
@@ -98,6 +99,7 @@ municipalities.forEach((m) => {
 // 凡例
 // ===============================
 const legend = L.control({ position: "bottomright" });
+
 legend.onAdd = function () {
   const div = L.DomUtil.create("div", "legend");
   div.innerHTML = `
@@ -107,4 +109,5 @@ legend.onAdd = function () {
   `;
   return div;
 };
+
 legend.addTo(map);
